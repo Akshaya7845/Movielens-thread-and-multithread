@@ -24,19 +24,25 @@ namespace MovieLensMVC
             var ratings = LoadRatings(uData);
 
             var controller = new ReportController(movies, users, ratings);
-
+            Console.WriteLine("\nRunning reports without threads...");
             var sw = Stopwatch.StartNew();
             var reportsSingle = controller.GenerateReportsSingleThread();
+            System.Threading.Thread.Sleep(500);
             sw.Stop();
             double singleTime = sw.Elapsed.TotalSeconds;
             ReportView.DisplayReportSummary("Without Threads", singleTime);
             ReportView.SaveReportsToCsv(Path.Combine(basePath, "output_singlethread"), reportsSingle);
+            Console.WriteLine("\nRunning reports with threads...");
             sw.Restart();
             var reportsMulti = controller.GenerateReportsMultiThread();
+            System.Threading.Thread.Sleep(100);
             sw.Stop();
             double multiTime = sw.Elapsed.TotalSeconds;
             ReportView.DisplayReportSummary("With Threads", multiTime);
             ReportView.SaveReportsToCsv(Path.Combine(basePath, "output_multithread"), reportsMulti);
+
+
+
             Console.WriteLine("\nReports generated successfully!");
         }
 
